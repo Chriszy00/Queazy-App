@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.quiz.quizapp.controller.ReviewController">
+    <children>
+        <VBox layoutX="14.0" layoutY="14.0" prefHeight="600.0" prefWidth="400.0" spacing="10.0" stylesheets="@../../../css/review.css">
+            <children>
+                <Label text="Review Your Answers" style="-fx-font-size: 24px; -fx-font-weight: bold;" />
+                <ListView fx:id="reviewListView" prefHeight="500.0" prefWidth="400.0" />
+                <Button text="Back to Results" onAction="#handleBackToResults" style="-fx-background-color: #504099; -fx-text-fill: white; -fx-font-size: 14px;"/>
+            </children>
+        </VBox>
+    </children>
+</AnchorPane>

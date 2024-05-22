@@ -1,5 +1,6 @@
 package com.quiz.quizapp.controller;
 
+import com.quiz.quizapp.model.Question;
 import com.quiz.quizapp.service.AvatarSelectionService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -12,6 +13,7 @@ import javafx.stage.Stage;
 import javafx.scene.control.Button;
 
 import java.io.IOException;
+import java.util.List;
 
 public class ResultController {
     @FXML
@@ -19,6 +21,8 @@ public class ResultController {
 
     @FXML
     private ImageView avatarImageViewResults;
+
+    private List<Question> questions; // Add this line to declare the questions list
 
     int correct;
     int wrong;
@@ -60,6 +64,10 @@ public class ResultController {
         timeTaken.setText(time);
     }
 
+    public void setQuestions(List<Question> questions) {
+        this.questions = questions; // Add this method to set the questions
+    }
+
     @FXML
     private void handleTakeAnotherQuiz(ActionEvent event) {
         try {
@@ -82,6 +90,24 @@ public class ResultController {
     private void handleCloseGame(ActionEvent event) {
         Stage stage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
         stage.close();
+    }
+
+    @FXML
+    private void handleReviewQuiz(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/quiz/quizapp/review.fxml"));
+            Stage stage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
+            Scene scene = new Scene(loader.load());
+            stage.setScene(scene);
+
+            // Pass the questions to the ReviewController
+            ReviewController reviewController = loader.getController();
+            reviewController.setQuestions(questions);
+
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }

@@ -121,7 +121,7 @@
                 <Button alignment="CENTER" layoutX="23.0" layoutY="377.0" mnemonicParsing="false" prefHeight="54.0"
                         prefWidth="331.0"
                         style="-fx-label-padding: 10px 20px; -fx-background-color: #E1AFD1; -fx-border-radius: 200px; -fx-background-radius: 15px;"
-                        text="REVIEW QUIZ" textFill="#fcfcfc">
+                        text="REVIEW QUIZ" textFill="#fcfcfc" onAction="#handleReviewQuiz">
                     <font>
                         <Font name="Calibri Bold" size="18.0"/>
                     </font>

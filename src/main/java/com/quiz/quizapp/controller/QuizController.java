@@ -1,5 +1,8 @@
 package com.quiz.quizapp.controller;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.quiz.quizapp.model.Question;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
@@ -15,12 +18,10 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
-import com.quiz.quizapp.model.Question;
 
 public class QuizController {
 
@@ -36,14 +37,13 @@ public class QuizController {
     @FXML
     private ImageView avatarImageView;
 
-
     static int counter = 0;
     static int correct = 0;
     static int wrong = 0;
+    static List<Question> questions; // Change this to static to access it in ResultController
     private long startTime;
     private Timeline timeline;
 
-    private List<Question> questions;
     private String category;
 
     public void setCategory(String category) {
@@ -72,12 +72,10 @@ public class QuizController {
         timeline.stop();
     }
 
-    //CRS: 05/21/2024 | Add this method to set the avatar image
     public void setAvatarImage(String imageUrl) {
         Image image = new Image(getClass().getResourceAsStream(imageUrl));
         avatarImageView.setImage(image);
     }
-
 
     private void loadQuestionsFromFile() {
         ObjectMapper objectMapper = new ObjectMapper();
@@ -114,8 +112,8 @@ public class QuizController {
     }
 
     private void handleOptionClick(ActionEvent event, Button button) {
-
-        MusicController.playClickSound(); // Play click sound
+        // Save the user's answer to the question
+        questions.get(counter).setUserAnswer(button.getText());
 
         if (checkAnswer(button.getText())) {
             correct++;
@@ -140,20 +138,6 @@ public class QuizController {
             long seconds = elapsedSeconds % 60;
             String elapsedTime = String.format("%02d:%02d:%02d", hours, minutes, seconds);
 
-            // Stop the current music
-            MusicController.stopMusic();
-
-            // Determine the result music based on the score
-            String resultMusicPath;
-            if (correct < 7) {
-                resultMusicPath = "src/main/resources/music/result_fail.wav"; // Path to fail music
-            } else {
-                resultMusicPath = "src/main/resources/music/result_success.wav"; // Path to success music
-            }
-
-            // Play the selected result music
-            MusicController.playMusic(resultMusicPath, -10.0f, false); // Adjust volume as needed
-
             Stage thisStage = (Stage) ((Button) event.getSource()).getScene().getWindow();
             thisStage.close();
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/quiz/quizapp/result.fxml"));
@@ -163,16 +147,16 @@ public class QuizController {
             stage.setScene(scene);
             stage.initStyle(StageStyle.TRANSPARENT);
 
-            // Pass the elapsed time to the ResultController
+            // Pass the elapsed time and questions to the ResultController
             ResultController resultController = loader.getController();
             resultController.setTimeTaken(elapsedTime);
+            resultController.setQuestions(questions);
 
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-
 
     @FXML
     public void opt1clicked(ActionEvent event) {

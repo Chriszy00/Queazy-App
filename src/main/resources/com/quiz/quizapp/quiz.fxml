@@ -74,6 +74,7 @@
                                    minWidth="-Infinity" prefHeight="160.0" prefWidth="160.0" progress="0.03"
                                    style="-fx-progress-color: #E1AFD1; -fx-box-border: #E1AFD1; -fx-fill: null;"/>
 
+<!--                Avatar Image-->
                 <ImageView fx:id="avatarImageView" fitHeight="131.0" fitWidth="120.0" layoutX="107.0" layoutY="-67.0"
                            pickOnBounds="true" preserveRatio="true"/>
 
