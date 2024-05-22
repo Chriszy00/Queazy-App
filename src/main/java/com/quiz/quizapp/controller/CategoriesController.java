@@ -1,10 +1,11 @@
 package com.quiz.quizapp.controller;
 
-import javafx.event.ActionEvent;
+import com.quiz.quizapp.service.AvatarSelectionService;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -12,25 +13,31 @@ import javafx.stage.StageStyle;
 public class CategoriesController {
 
     @FXML
-    private Button mathBtn;
+    private Pane mathPane;
 
     @FXML
-    private Button sciBtn;
+    private Pane sciPane;
 
     @FXML
-    private Button geoBtn;
+    private Pane geoPane;
+
+    private String selectedAvatar;
+
+    public void setSelectedAvatar(String selectedAvatar) {
+        this.selectedAvatar = selectedAvatar;
+    }
 
     @FXML
     private void initialize() {
-
-        mathBtn.setOnAction(event -> loadQuiz(event, "math"));
-        sciBtn.setOnAction(event -> loadQuiz(event, "science"));
-        geoBtn.setOnAction(event -> loadQuiz(event, "geography"));
+        mathPane.setOnMouseClicked(event -> loadQuiz(event, "math"));
+        sciPane.setOnMouseClicked(event -> loadQuiz(event, "science"));
+        geoPane.setOnMouseClicked(event -> loadQuiz(event, "geography"));
     }
 
-    private void loadQuiz(ActionEvent event, String category) {
+    private void loadQuiz(MouseEvent event, String category) {
+        MusicController.playClickSound(); // Play click sound
         try {
-            Stage thisStage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+            Stage thisStage = (Stage) ((Pane) event.getSource()).getScene().getWindow();
             thisStage.close();
 
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/quiz/quizapp/quiz.fxml"));
@@ -38,6 +45,10 @@ public class CategoriesController {
 
             QuizController controller = loader.getController();
             controller.setCategory(category);
+            controller.setAvatarImage(AvatarSelectionService.getInstance().getSelectedAvatar());  // CRS: 05/21/2024 | Pass the selected avatar to the QuizController
+
+            // Play the corresponding music
+            playMusicForCategory(category);
 
             Stage stage = new Stage();
             stage.setScene(scene);
@@ -47,5 +58,26 @@ public class CategoriesController {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private void playMusicForCategory(String category) {
+        String musicPath = null;
+
+        switch (category) {
+            case "math":
+                musicPath = "src/main/resources/music/math_music.wav";
+                break;
+            case "science":
+                musicPath = "src/main/resources/music/science_music.wav";
+                break;
+            case "geography":
+                musicPath = "src/main/resources/music/geography_music.wav";
+                break;
+            default:
+                System.out.println("No music for this category");
+                return;
+        }
+
+        MusicController.playMusic(musicPath, -15.0f, true); // Adjust volume as needed
     }
 }

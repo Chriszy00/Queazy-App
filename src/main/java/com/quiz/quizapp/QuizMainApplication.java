@@ -1,6 +1,7 @@
 package com.quiz.quizapp;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.quiz.quizapp.controller.MusicController;
 import com.quiz.quizapp.model.QuizQuestion;
 import javafx.application.Application;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -13,6 +14,8 @@ import javafx.stage.StageStyle;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
+import com.quiz.quizapp.controller.MusicController;
+
 
 public class QuizMainApplication extends Application {
 
@@ -24,7 +27,9 @@ public class QuizMainApplication extends Application {
         stage.initStyle(StageStyle.TRANSPARENT);
         scene.setFill(Color.TRANSPARENT);
         stage.show();
+    MusicController.playMusic("src/main/resources/music/default_music.wav", -10.0f, true); // Adjust volume and loop as needed
     }
+
 
     private List<QuizQuestion> loadQuestions() {
         ObjectMapper mapper = new ObjectMapper();
